@@ -1,11 +1,13 @@
 package com.telstra.telstraexcercise.ui.activity;
 
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.Toast;
+import android.view.View;
 
 import com.telstra.telstraexcercise.R;
 import com.telstra.telstraexcercise.adapter.FactsListAdapter;
@@ -30,9 +32,12 @@ public class MainActivity extends BaseActivity implements FactsView {
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.rv_facts_list)
     RecyclerView factListView;
+    @BindView(R.id.layout_coordinator)
+    CoordinatorLayout coordinatorLayout;
 
     @Inject
     FactsPresenter factsPresenter;
+    Snackbar snackbar;
 
     private FactsComponent factsComponent;
 
@@ -61,6 +66,9 @@ public class MainActivity extends BaseActivity implements FactsView {
                 getFactsDataFromServer();
             }
         });
+
+        snackbar = Snackbar.make(coordinatorLayout, getString(R.string.retry_message), Snackbar.LENGTH_INDEFINITE);
+        snackbar.setAction(getString(R.string.retry), new RetryActionListener());
     }
 
     private void getFactsDataFromServer() {
@@ -79,7 +87,7 @@ public class MainActivity extends BaseActivity implements FactsView {
     @Override
     public void showError() {
         swipeRefreshLayout.setRefreshing(false);
-        Toast.makeText(this, "Some error occured. Please try again later", Toast.LENGTH_SHORT).show();
+        showRetryMessage();
     }
 
     @Override
@@ -91,5 +99,17 @@ public class MainActivity extends BaseActivity implements FactsView {
     protected void onStop() {
         super.onStop();
         factsPresenter.onActivityStop();
+    }
+
+    private void showRetryMessage() {
+        snackbar.show();
+    }
+
+    private class RetryActionListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            getFactsDataFromServer();
+        }
     }
 }
