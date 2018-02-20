@@ -3,4 +3,6 @@
 
     <string name="retry_message">Some error occured. Please retry</string>
     <string name="retry">Retry</string>
+    <string name="network_error">No network connection</string>
+    <string name="no_data">No items to show</string>
 </resources>

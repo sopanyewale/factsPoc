@@ -8,6 +8,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
 import com.telstra.telstraexcercise.R;
 import com.telstra.telstraexcercise.adapter.FactsListAdapter;
@@ -18,6 +19,7 @@ import com.telstra.telstraexcercise.business.di.module.FactsModule;
 import com.telstra.telstraexcercise.business.model.FactsItem;
 import com.telstra.telstraexcercise.ui.mvp.FactsPresenter;
 import com.telstra.telstraexcercise.ui.mvp.FactsView;
+import com.telstra.telstraexcercise.utils.NetworkUtil;
 
 import java.util.ArrayList;
 
@@ -34,6 +36,8 @@ public class MainActivity extends BaseActivity implements FactsView {
     RecyclerView factListView;
     @BindView(R.id.layout_coordinator)
     CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.txt_no_data)
+    TextView txtNoData;
 
     @Inject
     FactsPresenter factsPresenter;
@@ -58,6 +62,7 @@ public class MainActivity extends BaseActivity implements FactsView {
         factListView.setLayoutManager(layoutManager);
         factListView.setItemAnimator(new DefaultItemAnimator());
 
+
         getFactsDataFromServer();
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -66,19 +71,26 @@ public class MainActivity extends BaseActivity implements FactsView {
                 getFactsDataFromServer();
             }
         });
-
-        snackbar = Snackbar.make(coordinatorLayout, getString(R.string.retry_message), Snackbar.LENGTH_INDEFINITE);
-        snackbar.setAction(getString(R.string.retry), new RetryActionListener());
     }
 
     private void getFactsDataFromServer() {
-        factsPresenter.getDataFromServer();
-        swipeRefreshLayout.setRefreshing(true);
+        if (NetworkUtil.isNetworkAvailable(this)) {
+            factsPresenter.getDataFromServer();
+            swipeRefreshLayout.setRefreshing(true);
+        } else {
+            swipeRefreshLayout.setRefreshing(false);
+            showRetryMessage(getString(R.string.network_error), null);
+        }
     }
 
 
     @Override
     public void displayFactsList(ArrayList<FactsItem> factList) {
+        if(factList.size() > 0)
+            txtNoData.setVisibility(View.INVISIBLE);
+        else
+            txtNoData.setVisibility(View.VISIBLE);
+
         FactsListAdapter factsListAdapter = new FactsListAdapter(this, factList);
         factListView.setAdapter(factsListAdapter);
         swipeRefreshLayout.setRefreshing(false);
@@ -87,7 +99,7 @@ public class MainActivity extends BaseActivity implements FactsView {
     @Override
     public void showError() {
         swipeRefreshLayout.setRefreshing(false);
-        showRetryMessage();
+        showRetryMessage(getString(R.string.retry_message), getString(R.string.retry));
     }
 
     @Override
@@ -101,7 +113,13 @@ public class MainActivity extends BaseActivity implements FactsView {
         factsPresenter.onActivityStop();
     }
 
-    private void showRetryMessage() {
+    private void showRetryMessage(String message, String action) {
+        if (null != action) {
+            snackbar = Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_INDEFINITE);
+            snackbar.setAction(getString(R.string.retry), new RetryActionListener());
+        } else {
+            snackbar = Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG);
+        }
         snackbar.show();
     }
 

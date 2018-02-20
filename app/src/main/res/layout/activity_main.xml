@@ -4,19 +4,32 @@
     android:id="@+id/layout_coordinator"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/light_grey"
     tools:context="com.telstra.telstraexcercise.ui.activity.MainActivity">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/layout_swipe_to_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:backgroundTint="@color/divider"
-        android:padding="10dp">
+        android:background="@android:color/transparent"
+        android:padding="5dp">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_facts_list"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent">
 
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_facts_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/txt_no_data"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/no_data" />
+        </RelativeLayout>
     </android.support.v4.widget.SwipeRefreshLayout>
+
 </android.support.design.widget.CoordinatorLayout>

@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/TelstraExcercise.iml" filepath="$PROJECT_DIR$/TelstraExcercise.iml" />
+      <module fileurl="file://D:\AndroidWorkspace\factsPoc\TelstraExcercise.iml" filepath="D:\AndroidWorkspace\factsPoc\TelstraExcercise.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://D:\AndroidWorkspace\factsPoc\app\app.iml" filepath="D:\AndroidWorkspace\factsPoc\app\app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/factsPoc.iml" filepath="$PROJECT_DIR$/.idea/factsPoc.iml" />
     </modules>
   </component>
 </project>

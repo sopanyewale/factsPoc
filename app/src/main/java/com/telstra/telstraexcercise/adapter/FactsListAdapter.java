@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.URLUtil;
 
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.telstra.telstraexcercise.R;
 import com.telstra.telstraexcercise.business.model.FactsItem;
@@ -51,7 +52,18 @@ public class FactsListAdapter extends RecyclerView.Adapter<FactsViewHolder> {
                     .load(factsItem.getImageHref())
                     .fit()
                     .placeholder(R.drawable.ic_error_outline_black_24dp)
-                    .into(holder.img_picture);
+                    .into(holder.img_picture, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            holder.img_picture.setVisibility(View.VISIBLE);
+                        }
+
+                        @Override
+                        public void onError() {
+                            holder.img_picture.setVisibility(View.GONE);
+                        }
+                    });
+
         } else {
             holder.img_picture.setVisibility(View.GONE);
         }
