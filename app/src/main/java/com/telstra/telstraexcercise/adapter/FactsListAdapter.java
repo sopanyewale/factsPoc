@@ -50,8 +50,9 @@ public class FactsListAdapter extends RecyclerView.Adapter<FactsViewHolder> {
             holder.img_picture.setVisibility(View.VISIBLE);
             Picasso.with(context)
                     .load(factsItem.getImageHref())
-                    .fit()
-                    .placeholder(R.drawable.ic_error_outline_black_24dp)
+                    .resizeDimen(R.dimen.recycler_image_size, R.dimen.recycler_image_size)
+                    .centerInside()
+                    //.placeholder(R.drawable.ic_error_outline_black_24dp)
                     .into(holder.img_picture, new Callback() {
                         @Override
                         public void onSuccess() {
