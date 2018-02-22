@@ -35,14 +35,9 @@ public class FactsPresenter extends BasePresenter<FactsView> {
                 ArrayList<FactsItem> refinedFactList = new ArrayList<FactsItem>();
                 for (int i = 0; i < factsDataObject.getFactsItems().size(); i++) {
                     FactsItem factsItem = factsDataObject.getFactsItems().get(i);
-                    String title = factsItem.getTitle();
-                    String desc = factsItem.getDescription();
-                    String imgUrl = factsItem.getImageHref();
-
-                    if (title == null && desc == null && imgUrl == null) {
-                        continue;
+                    if(isFactValid(factsItem)) {
+                        refinedFactList.add(factsItem);
                     }
-                    refinedFactList.add(factsItem);
                 }
                 mView.setScreenTitle(factsDataObject.getTitle());
                 mView.displayFactsList(refinedFactList);
@@ -60,6 +55,14 @@ public class FactsPresenter extends BasePresenter<FactsView> {
 
     public void onActivityStop() {
         subscriptions.unsubscribe();
+    }
+
+    public boolean isFactValid(FactsItem factsItem){
+        String title = factsItem.getTitle();
+        String desc = factsItem.getDescription();
+        String imgUrl = factsItem.getImageHref();
+
+        return (title != null && desc != null && imgUrl != null);
     }
 
 }
