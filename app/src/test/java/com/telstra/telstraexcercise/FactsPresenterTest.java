@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -17,7 +17,7 @@ import static org.mockito.Mockito.when;
 /**
  * Created by SO356253 on 2/22/2018.
  */
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(PowerMockRunner.class)
 public class FactsPresenterTest {
 
     @Mock
@@ -33,7 +33,7 @@ public class FactsPresenterTest {
     }
 
     @Test
-    public void isFactValid_returnsTrue() {
+    public void test_isFactValid_returnsTrue_whenNoNullValue() {
         when(factsItem.getTitle()).thenReturn("FactTitle");
         when(factsItem.getDescription()).thenReturn("FactDesc");
         when(factsItem.getImageHref()).thenReturn("FactImageUrl");
@@ -41,4 +41,12 @@ public class FactsPresenterTest {
         assertThat(factsPresenter.isFactValid(factsItem), is(true));
     }
 
+    @Test
+    public void test_isFactValid_returnsFalse_whenNullValue() {
+        when(factsItem.getTitle()).thenReturn(null);
+        when(factsItem.getDescription()).thenReturn("FactDesc");
+        when(factsItem.getImageHref()).thenReturn("FactImageUrl");
+
+        assertThat(factsPresenter.isFactValid(factsItem), is(false));
+    }
 }
